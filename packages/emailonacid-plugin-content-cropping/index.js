@@ -28,7 +28,7 @@ function ContentCroppingPlugin({
         jpegMarkerColor,
         logger,
       });
-      context.stream = context.stream.pipe(
+      context.results.stream = context.results.stream.pipe(
         new stream.Transform({
           objectMode: true,
           transform([clientId, image], encoding, next) {

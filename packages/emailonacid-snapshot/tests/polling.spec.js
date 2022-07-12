@@ -4,6 +4,7 @@ const {
   createServer,
 } = require('@researchgate/emailonacid-emulator/standalone');
 const { configureCreateEmail } = require('../');
+const { OutputType } = require('../config');
 
 jest.unmock('cross-fetch');
 
@@ -30,6 +31,7 @@ describe('polling', () => {
         credentials: { apiKey: 'sandbox', accountPassword: 'sandbox' },
         clients: [clientName],
         server: emulator.url,
+        outputType: [OutputType.STREAM, OutputType.LINK],
       });
       // Set available clients
       emulator.setState({
@@ -39,15 +41,17 @@ describe('polling', () => {
       });
       const email = await createEmail('');
       // Set desired result
+      const imageUrl = [
+        fixtures.url,
+        pathToFixture(`polling-polls-the-result-${clientName}.png`),
+      ].join('/');
+
       emulator.setState({
         results: {
           [email.id]: {
             [clientName]: {
               screenshots: {
-                default: [
-                  fixtures.url,
-                  pathToFixture(`polling-polls-the-result-${clientName}.png`),
-                ].join('/'),
+                default: imageUrl,
               },
               status_details: {
                 // Simulate EoA's time shift bug
@@ -58,7 +62,9 @@ describe('polling', () => {
           },
         },
       });
-      expect(await email.screenshot(clientName)).toMatchImageSnapshot();
+      const results = await email.screenshot(clientName);
+      expect(results.stream).toMatchImageSnapshot();
+      expect(results.link.href).toEqual(new URL(imageUrl).href);
     }
   );
 });

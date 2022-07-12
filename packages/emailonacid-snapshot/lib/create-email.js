@@ -7,7 +7,7 @@ const createClient = require('@researchgate/emailonacid-client');
 const getConfig = require('./get-config');
 const createLogger = require('./create-logger');
 const getConfigDefaults = require('./get-config-defaults');
-const createResultStream = require('./create-result-stream');
+const createResult = require('./create-result');
 
 function configureCreateEmail(configuredOptions = {}) {
   // Merge all given options, but replace list of clients instead of concat
@@ -83,9 +83,9 @@ function configureCreateEmail(configuredOptions = {}) {
       subject: context.email.subject,
     });
     // eslint-disable-next-line require-atomic-updates
-    context.stream = createResultStream(context, options);
+    context.results = createResult(context, options);
     // eslint-disable-next-line require-atomic-updates
-    context.stopPolling = context.stream.stopPolling.bind(context.stream);
+    context.stopPolling = context.results.stopPolling.bind(context.results);
     // Track complete result timings
     options.clients.forEach((clientId) =>
       logger.time(`screenshot:${clientId}`)
@@ -93,16 +93,30 @@ function configureCreateEmail(configuredOptions = {}) {
     // Run `process` plugins
     for (const plugin of options.plugins) {
       if (plugin.convert) {
-        await plugin.convert(context);
+        // await plugin.convert(context);
       }
     }
-    // Convert stream to a map of promises
+    // Convert results to a map of promises
     const results = options.clients.reduce((map, clientId) => {
       return map.set(
         clientId,
         new Promise((resolve) => {
-          context.stream.on('data', ([receivedClientId, image]) => {
-            if (clientId === receivedClientId) resolve(image);
+          const { stream, link } = context.results;
+          let count = 0;
+          if (stream) count++;
+          if (link) count++;
+          let resolved = {};
+
+          const setCompleted = (data) => {
+            resolved = mergeWith(resolved, data);
+            if (--count === 0) resolve(resolved);
+          };
+
+          stream.on('data', ([receivedClientId, image]) => {
+            if (clientId === receivedClientId) setCompleted({ stream: image });
+          });
+          link.on('data', ([receivedClientId, url]) => {
+            if (clientId === receivedClientId) setCompleted({ link: url });
           });
         })
       );
@@ -129,7 +143,10 @@ function configureCreateEmail(configuredOptions = {}) {
           clientId
         );
         const image = await results.get(clientId);
-        const result = await image.getBufferAsync(Jimp.MIME_PNG);
+        const result = {
+          stream: await image.stream?.getBufferAsync(Jimp.MIME_PNG),
+          link: image.link,
+        };
         logger.timeEnd(`screenshot:${clientId}`);
         return result;
       },

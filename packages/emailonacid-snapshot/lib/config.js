@@ -27,7 +27,13 @@ function withDefaultPlugins(config = {}) {
   });
 }
 
+const OutputType = {
+  STREAM: 0,
+  LINK: 1,
+};
+
 module.exports = {
   withOverridableClients,
   withDefaultPlugins,
+  OutputType,
 };

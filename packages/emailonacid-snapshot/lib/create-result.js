@@ -1,24 +1,38 @@
 'use strict';
 
-const { Readable } = require('stream');
+const { OutputType } = require('./config');
 const { fetch } = require('cross-fetch');
+const { Readable, EventEmitter } = require('stream');
 const Jimp = require('jimp');
+
 const COMPLETED_TIMESTAMP_HOURS_SHIFT = -7;
 const SCREENSHOT_FETCH_RETRIES = 3;
 
 class ResultStream extends Readable {
-  constructor(context, options) {
+  constructor(options) {
     super({ objectMode: true });
-    this.backOffInterval = options.poll.interval;
-    this.aborted = false;
-    this.context = context;
     this.options = options;
-    this.completed = new Map();
-    this.startPolling();
   }
 
   // Stream hangs if not custom `_read` is provided
   _read() {}
+}
+
+class Result {
+  constructor(context, options) {
+    this.backOffInterval = options.poll.interval;
+    this.aborted = false;
+    this.context = context;
+    this.options = options;
+    this.stream = options.outputType.includes(OutputType.STREAM)
+      ? new ResultStream(options)
+      : null;
+    this.link = options.outputType.includes(OutputType.LINK)
+      ? new EventEmitter()
+      : null;
+    this.completed = new Map();
+    this.startPolling();
+  }
 
   async startPolling() {
     const { logger, test, options } = this.context;
@@ -38,7 +52,7 @@ class ResultStream extends Readable {
       throw reason;
     } finally {
       // Mark stream completed
-      this.push(null);
+      this.stream.push(null);
       const elapsed = Math.round((Date.now() - startedAt) / 1000);
       logger.debug('polling complete');
       logger.debug('test %s is ready in total %s seconds', test.id, elapsed);
@@ -62,7 +76,7 @@ class ResultStream extends Readable {
   }
 
   async progress(status) {
-    const { logger, test, client } = this.context;
+    const { logger, test, client, options } = this.context;
     logger.debug('progress update for %s', test.id);
     logger.debug(
       'processing: %s | completed: %s | bounced: %s',
@@ -92,11 +106,17 @@ class ResultStream extends Readable {
           elapsed,
           attempts
         );
-        logger.debug('fetching %s', screenshotUrl);
         // Remember the result to avoid double processing
-        const image = await this.fetchScreenshot(screenshotUrl);
-        this.completed.set(clientId, image);
-        this.push([clientId, image]);
+        if (options.outputType.includes(OutputType.STREAM)) {
+          logger.debug('fetching %s', screenshotUrl);
+          const image = await this.fetchScreenshot(screenshotUrl);
+          this.stream.push([clientId, image]);
+        }
+        if (options.outputType.includes(OutputType.LINK)) {
+          logger.debug('linking %s', screenshotUrl);
+          this.link.emit('data', [clientId, new URL(screenshotUrl)]);
+        }
+        this.completed.set(clientId, { stream: this.stream, link: this.link });
       })
     );
   }
@@ -131,7 +151,9 @@ class ResultStream extends Readable {
   async stopPolling() {
     this.aborted = true;
     await new Promise((resolve) => setImmediate(resolve));
-    this.destroy();
+    this.stream?.destroy();
+    await new Promise((resolve) => setImmediate(resolve));
+    this.link?.removeAllListeners();
     await new Promise((resolve) => setImmediate(resolve));
   }
 
@@ -160,8 +182,8 @@ class ResultStream extends Readable {
   }
 }
 
-function createResultStream(context, options) {
-  return new ResultStream(context, options);
+function createResult(context, options) {
+  return new Result(context, options);
 }
 
-module.exports = createResultStream;
+module.exports = createResult;

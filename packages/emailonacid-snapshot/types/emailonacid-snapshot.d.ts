@@ -13,13 +13,26 @@ export interface Context {
   test?: {
     id: TestId;
   };
-  stream?: Readable;
+  results: {
+    stream?: Readable;
+    link?: URL;
+  };
   stopPolling?: () => Promise<void>;
+}
+
+export interface Results {
+  stream?: Buffer;
+  link?: URL;
 }
 
 export interface Plugin {
   prepare(context: Context): any;
   convert(context: Context): any;
+}
+
+export enum OutputType {
+  STREAM = 0,
+  LINK = 1,
 }
 
 export interface Config {
@@ -35,6 +48,7 @@ export interface Config {
     timeout?: number;
   };
   server?: string;
+  outputType?: Array<OutputType>;
 }
 
 export interface Email<T> {
@@ -42,7 +56,7 @@ export interface Email<T> {
   subject: string;
   content: string;
   clients: Array<ClientId>;
-  screenshot(clientId: ClientId): Promise<Buffer>;
+  screenshot(clientId: ClientId): Promise<Results>;
   clean(): Promise<boolean>;
 }
 
