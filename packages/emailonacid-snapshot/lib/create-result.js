@@ -52,7 +52,7 @@ class Result {
       throw reason;
     } finally {
       // Mark stream completed
-      this.stream.push(null);
+      this.stream?.push(null);
       const elapsed = Math.round((Date.now() - startedAt) / 1000);
       logger.debug('polling complete');
       logger.debug('test %s is ready in total %s seconds', test.id, elapsed);

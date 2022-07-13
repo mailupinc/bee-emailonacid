@@ -112,10 +112,10 @@ function configureCreateEmail(configuredOptions = {}) {
             if (--count === 0) resolve(resolved);
           };
 
-          stream.on('data', ([receivedClientId, image]) => {
+          stream?.on('data', ([receivedClientId, image]) => {
             if (clientId === receivedClientId) setCompleted({ stream: image });
           });
-          link.on('data', ([receivedClientId, url]) => {
+          link?.on('data', ([receivedClientId, url]) => {
             if (clientId === receivedClientId) setCompleted({ link: url });
           });
         })
