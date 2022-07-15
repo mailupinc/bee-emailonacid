@@ -1,6 +1,8 @@
 {
   "name": "@mailupinc/bee-emailonacid",
+  "version": "1.0.0",
   "private": true,
+  "main": "index.js",
   "workspaces": [
     "packages/*"
   ],
@@ -11,6 +13,7 @@
     "test": "spire test",
     "release": "spire release"
   },
+  "homepage": "https://github.com/mailupinc/bee-emailonacid",
   "devDependencies": {
     "@researchgate/spire-config": "6.0.2",
     "@types/jest": "26.0.20",

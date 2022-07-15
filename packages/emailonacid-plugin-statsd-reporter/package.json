@@ -1,5 +1,5 @@
 {
-  "name": "@researchgate/emailonacid-plugin-statsd-reporter",
+  "name": "@mailupinc/bee-emailonacid-plugin-statsd-reporter",
   "version": "4.0.4",
   "main": "index.js",
   "author": "Sergey Bekrin <sergey@bekrin.me>",

@@ -1,5 +1,5 @@
 {
-  "name": "@researchgate/emailonacid-emulator",
+  "name": "@mailupinc/bee-emailonacid-emulator",
   "version": "4.0.4",
   "main": "index.js",
   "author": "Sergey Bekrin <sergey@bekrin.me>",

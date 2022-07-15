@@ -1,5 +1,5 @@
 {
-  "name": "@researchgate/emailonacid-plugin-content-renderer",
+  "name": "@mailupinc/bee-emailonacid-plugin-content-renderer",
   "version": "4.0.1",
   "main": "index.js",
   "author": "Sergey Bekrin <sergey@bekrin.me>",

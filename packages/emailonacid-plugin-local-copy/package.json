@@ -1,5 +1,5 @@
 {
-  "name": "@researchgate/emailonacid-plugin-local-copy",
+  "name": "@mailupinc/bee-emailonacid-plugin-local-copy",
   "version": "4.0.3",
   "main": "index.js",
   "author": "Sergey Bekrin <sergey@bekrin.me>",

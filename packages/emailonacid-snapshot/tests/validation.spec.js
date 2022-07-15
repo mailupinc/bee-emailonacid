@@ -1,6 +1,6 @@
 const {
   createEmulator,
-} = require('@researchgate/emailonacid-emulator/standalone');
+} = require('@mailupinc/bee-emailonacid-emulator/standalone');
 const { configureCreateEmail } = require('../');
 
 jest.unmock('cross-fetch');

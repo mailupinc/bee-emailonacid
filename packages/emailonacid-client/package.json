@@ -1,5 +1,5 @@
 {
-  "name": "@researchgate/emailonacid-client",
+  "name": "@mailupinc/bee-emailonacid-client",
   "version": "4.0.1",
   "description": "Client for EmailOnAcid REST API Service",
   "main": "index.js",

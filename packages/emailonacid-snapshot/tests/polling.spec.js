@@ -2,7 +2,7 @@ const { join, relative } = require('path');
 const {
   createEmulator,
   createServer,
-} = require('@researchgate/emailonacid-emulator/standalone');
+} = require('@mailupinc/bee-emailonacid-emulator/standalone');
 const { configureCreateEmail } = require('../');
 const { OutputType } = require('../config');
 

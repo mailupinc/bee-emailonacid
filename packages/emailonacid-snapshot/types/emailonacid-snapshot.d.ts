@@ -1,6 +1,6 @@
 import { Signale } from 'signale';
 import { Readable } from 'stream';
-import { Client, ClientId, TestId } from '@researchgate/emailonacid-client';
+import { Client, ClientId, TestId } from '@mailupinc/bee-emailonacid-client';
 
 export interface Context {
   options: Config;
