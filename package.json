@@ -5,6 +5,10 @@
   "workspaces": [
     "packages/*"
   ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/"
+  },
   "author": "Sergey Bekrin <sergey@bekrin.me>",
   "license": "MIT",
   "scripts": {
