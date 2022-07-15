@@ -28,7 +28,7 @@ function withDefaultPlugins(config = {}) {
 }
 
 const OutputType = {
-  STREAM: 0,
+  BUFFER: 0,
   LINK: 1,
 };
 

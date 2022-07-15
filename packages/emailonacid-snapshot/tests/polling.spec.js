@@ -31,7 +31,7 @@ describe('polling', () => {
         credentials: { apiKey: 'sandbox', accountPassword: 'sandbox' },
         clients: [clientName],
         server: emulator.url,
-        outputType: [OutputType.STREAM, OutputType.LINK],
+        outputType: [OutputType.BUFFER, OutputType.LINK],
       });
       // Set available clients
       emulator.setState({

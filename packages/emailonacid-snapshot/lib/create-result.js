@@ -24,7 +24,7 @@ class Result {
     this.aborted = false;
     this.context = context;
     this.options = options;
-    this.stream = options.outputType.includes(OutputType.STREAM)
+    this.stream = options.outputType.includes(OutputType.BUFFER)
       ? new ResultStream(options)
       : null;
     this.link = options.outputType.includes(OutputType.LINK)
@@ -107,7 +107,7 @@ class Result {
           attempts
         );
         // Remember the result to avoid double processing
-        if (options.outputType.includes(OutputType.STREAM)) {
+        if (options.outputType.includes(OutputType.BUFFER)) {
           logger.debug('fetching %s', screenshotUrl);
           const image = await this.fetchScreenshot(screenshotUrl);
           this.stream.push([clientId, image]);

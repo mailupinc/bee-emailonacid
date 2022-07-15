@@ -31,7 +31,7 @@ export interface Plugin {
 }
 
 export enum OutputType {
-  STREAM = 0,
+  BUFFER = 0,
   LINK = 1,
 }
 
