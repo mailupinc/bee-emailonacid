@@ -5,6 +5,7 @@
   "workspaces": [
     "packages/*"
   ],
+  "main": "index.js",
   "publishConfig": {
     "access": "restricted",
     "registry": "https://registry.npmjs.org/"
