@@ -198,15 +198,15 @@ function createClient({
       });
       return success;
     },
-    async reprocessScreenshots(testId, clients) {
+    async reprocessScreenshots(testId, clientIds) {
       // Validate mandatory options
       validateNonEmptyString(testId, 'testId');
-      validateStringArray(clients, 'clients');
+      validateStringArray(clientIds, 'clients');
       const response = await fetchApi(
         `email/tests/${testId}/results/reprocess`,
         {
-          method: 'POST',
-          body: JSON.stringify({ clients: clients }),
+          method: 'PUT',
+          body: JSON.stringify({ clients: clientIds }),
         }
       );
       return response;

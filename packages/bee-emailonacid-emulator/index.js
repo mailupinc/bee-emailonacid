@@ -1,6 +1,6 @@
 'use strict';
 
-const { router, withNamespace, get, post, del } = require('microrouter');
+const { router, withNamespace, get, post, del, put } = require('microrouter');
 const { withToken, withPayload } = require('./lib/request');
 const { handler } = require('./lib/handler');
 
@@ -19,10 +19,7 @@ module.exports = router(
         get('/email/tests/:id/content', handler.getTestContent),
         get('/email/tests/:id', handler.getTestInfo),
         del('/email/tests/:id', handler.deleteTest),
-        post(
-          '/email/tests/:id/results/reprocess',
-          handler.reprocessScreenshots
-        ),
+        put('/email/tests/:id/results/reprocess', handler.reprocessScreenshots),
         handler.notFound
       )
     )

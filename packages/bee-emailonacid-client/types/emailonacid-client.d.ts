@@ -160,6 +160,14 @@ export interface Client {
    * @see https://api.emailonacid.com/docs/latest/email-testing#delete-test
    */
   deleteTest(testId: TestId): Promise<boolean>;
+  /**
+   * Resubmits Test client screenshot request
+   * @see https://api.emailonacid.com/docs/latest/email-testing#reprocess
+   */
+  reprocessScreenshots(
+    testId: TestId,
+    clientIds: Array<ClientId>
+  ): Promise<Object>;
 }
 
 /** Creates new EmailOnAcid API client */
