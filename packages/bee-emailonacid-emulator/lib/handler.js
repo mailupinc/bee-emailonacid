@@ -158,6 +158,18 @@ const handler = {
     }
     return send(res, 404, new InvalidTestIdError());
   },
+  async reprocessScreenshots(req, res) {
+    const test = getState().tests[req.params.id];
+    if (test) {
+      const { defaultClients } = getState();
+      const { clients = defaultClients } = await json(req);
+      return clients.reduce((acc, el) => {
+        acc[el] = { success: true };
+        return acc;
+      }, {});
+    }
+    return send(res, 404, new InvalidTestIdError());
+  },
   async notFound(req, res) {
     return send(res, 404, new NotFoundError());
   },

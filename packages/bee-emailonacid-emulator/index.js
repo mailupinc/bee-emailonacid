@@ -19,6 +19,10 @@ module.exports = router(
         get('/email/tests/:id/content', handler.getTestContent),
         get('/email/tests/:id', handler.getTestInfo),
         del('/email/tests/:id', handler.deleteTest),
+        post(
+          '/email/tests/:id/results/reprocess',
+          handler.reprocessScreenshots
+        ),
         handler.notFound
       )
     )

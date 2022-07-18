@@ -326,4 +326,21 @@ describe('createClient', () => {
       await expect(client.deleteTest('t3st')).rejects.toBeDefined();
     });
   });
+
+  describe('reprocess screeshots', () => {
+    it('reprocess clients screenshots', async () => {
+      const client = createClient(clientDefaults);
+      fetch.mockResponse({
+        'http://example.com/email/tests/t3st/results/reprocess': (body) => {
+          return body.clients.reduce((acc, el) => {
+            acc[el] = { success: true };
+            return acc;
+          }, {});
+        },
+      });
+      expect(
+        await client.reprocessScreenshots('t3st', ['client1', 'client2'])
+      ).toEqual({ client1: { success: true }, client2: { success: true } });
+    });
+  });
 });

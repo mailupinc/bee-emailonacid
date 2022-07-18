@@ -198,6 +198,19 @@ function createClient({
       });
       return success;
     },
+    async reprocessScreenshots(testId, clients) {
+      // Validate mandatory options
+      validateNonEmptyString(testId, 'testId');
+      validateStringArray(clients, 'clients');
+      const response = await fetchApi(
+        `email/tests/${testId}/results/reprocess`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ clients: clients }),
+        }
+      );
+      return response;
+    },
   };
 }
 
