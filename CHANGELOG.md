@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.5](https://github.com/mailupinc/emailonacid/compare/v4.0.4...v4.0.5) (2022-07-18)
+
+### Bug Fixes
+
+- **deps:** update dependency cosmiconfig to v7
+  ([dd8530b](https://github.com/mailupinc/emailonacid/commit/dd8530bbb6e79ba86f3136c120acab16c1c27404))
+- **deps:** update dependency execa to v5
+  ([10b5344](https://github.com/mailupinc/emailonacid/commit/10b5344ad6fe31608f2bae970b74a2e59ad14f7b))
+- **deps:** update dependency get-stdin to v8
+  ([b33f402](https://github.com/mailupinc/emailonacid/commit/b33f402ff013d5028c3ebfe1c1e61b86c5e88a24))
+- **deps:** update dependency hot-shots to v8
+  ([e28b46a](https://github.com/mailupinc/emailonacid/commit/e28b46a2756eb537d0db5dfd2c3df020a919c5d0))
+- **deps:** update dependency jimp to ^0.10.0
+  ([bfb3889](https://github.com/mailupinc/emailonacid/commit/bfb38890ff2bb6aee0a39eb01aa98704ca0b36a6))
+- **deps:** update dependency jimp to ^0.12.0
+  ([59118ad](https://github.com/mailupinc/emailonacid/commit/59118ad26a4f157c8363295e6999e4ca0f53829a))
+- **deps:** update dependency jimp to ^0.14.0
+  ([81eb4e5](https://github.com/mailupinc/emailonacid/commit/81eb4e5507e0bebeab6bbff60a7a9807515a3b75))
+- **deps:** update dependency jimp to ^0.16.0
+  ([4161f44](https://github.com/mailupinc/emailonacid/commit/4161f4495a8e0ec13bc8c4280eb2a8a1ba42bf2b))
+- **deps:** update dependency parse5 to v6
+  ([0585eb7](https://github.com/mailupinc/emailonacid/commit/0585eb7cc0a739fc07b0ad08f92d3241243d87a4))
+- **deps:** update dependency yargs to v16
+  ([53b2c84](https://github.com/mailupinc/emailonacid/commit/53b2c84287f7d8e38a3ef1092ccb282d95dc7060))
+- **proxy:** fix integration of yargs
+  ([634a520](https://github.com/mailupinc/emailonacid/commit/634a520e70355d6a4301bf4bc918fe08a7215290))
+- **proxy:** Migrate to yargs
+  ([3852921](https://github.com/mailupinc/emailonacid/commit/3852921d9877510bbfdd433fb02aa25be747b73f))
+
+# Change Log
+
+All notable changes to this project will be documented in this file. See
+[Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
 ## [4.0.4](https://github.com/researchgate/emailonacid/compare/v4.0.3...v4.0.4) (2020-03-24)
 
 ### Bug Fixes

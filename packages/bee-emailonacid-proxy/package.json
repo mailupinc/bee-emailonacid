@@ -1,6 +1,6 @@
 {
   "name": "@mailupinc/bee-emailonacid-proxy",
-  "version": "4.0.3",
+  "version": "4.0.5",
   "engines": {
     "node": ">=10"
   },

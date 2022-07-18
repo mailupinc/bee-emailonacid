@@ -1,6 +1,6 @@
 {
   "name": "@mailupinc/bee-emailonacid-snapshot",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "description": "Mails visual regression tooling via Email on Acid service",
   "main": "index.js",
   "types": "types/emailonacid-snapshot.d.ts",
@@ -18,11 +18,11 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@mailupinc/bee-emailonacid-client": "^4.0.1",
-    "@mailupinc/bee-emailonacid-plugin-content-cropping": "^4.0.3",
-    "@mailupinc/bee-emailonacid-plugin-content-renderer": "^4.0.1",
-    "@mailupinc/bee-emailonacid-plugin-local-copy": "^4.0.3",
-    "@mailupinc/bee-emailonacid-plugin-thread-busting": "^4.0.1",
+    "@mailupinc/bee-emailonacid-client": "^4.0.5",
+    "@mailupinc/bee-emailonacid-plugin-content-cropping": "^4.0.5",
+    "@mailupinc/bee-emailonacid-plugin-content-renderer": "^4.0.5",
+    "@mailupinc/bee-emailonacid-plugin-local-copy": "^4.0.5",
+    "@mailupinc/bee-emailonacid-plugin-thread-busting": "^4.0.5",
     "cosmiconfig": "^7.0.0",
     "cross-fetch": "^3.0.4",
     "invariant": "^2.2.4",
@@ -32,7 +32,7 @@
     "signale": "^1.4.0"
   },
   "devDependencies": {
-    "@mailupinc/bee-emailonacid-emulator": "^4.0.4"
+    "@mailupinc/bee-emailonacid-emulator": "^4.0.5"
   },
   "peerDependencies": {
     "jest": ">=22"
