@@ -1,15 +1,10 @@
 {
   "name": "@mailupinc/bee-emailonacid",
-  "version": "5.0.0",
+  "version": "1.0.0",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
-  "main": "index.js",
-  "publishConfig": {
-    "access": "restricted",
-    "registry": "https://registry.npmjs.org/"
-  },
   "author": "Sergey Bekrin <sergey@bekrin.me>",
   "license": "MIT",
   "scripts": {
