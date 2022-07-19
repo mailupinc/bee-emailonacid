@@ -1,7 +1,6 @@
 'use strict';
 
 const { Signale } = require('signale');
-const types = require('signale/types');
 
 function createLogger(options) {
   return new Signale({
@@ -12,14 +11,8 @@ function createLogger(options) {
     },
     scope: 'emailonacid',
     interactive: false,
-    types: {
-      ...types,
-      debug: {
-        ...types.note,
-        label: 'debug',
-        stream: options.debug ? [process.stdout] : [],
-      },
-    },
+    stream: options.debug ? options.stream || [process.stdout] : [],
+    logLevel: options.logLevel,
   });
 }
 

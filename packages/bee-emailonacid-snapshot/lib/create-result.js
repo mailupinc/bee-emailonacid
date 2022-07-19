@@ -22,6 +22,7 @@ class Result {
   constructor(context, options) {
     this.backOffInterval = options.poll.interval;
     this.aborted = false;
+    this.timeouts = [];
     this.context = context;
     this.options = options;
     this.stream = options.outputType.includes(OutputType.BUFFER)
@@ -122,18 +123,20 @@ class Result {
   }
 
   async rejectAfterTimeout() {
-    await new Promise((_, reject) =>
-      setTimeout(() => {
-        const timeout = this.options.poll.timeout / 1000;
-        const timeoutedClients = this.options.clients.filter(
-          (clientId) => !this.completed.has(clientId)
-        );
-        const error = new Error();
-        error.message = `Polling timeout of ${timeoutedClients} after ${timeout}s`;
-        error.clients = timeoutedClients;
-        reject(error);
-      }, this.options.poll.timeout)
-    );
+    return new Promise((_, reject) => {
+      this.timeouts.push(
+        setTimeout(() => {
+          const timeout = this.options.poll.timeout / 1000;
+          const timeoutedClients = this.options.clients.filter(
+            (clientId) => !this.completed.has(clientId)
+          );
+          const error = new Error();
+          error.message = `Polling timeout of ${timeoutedClients} after ${timeout}s`;
+          error.clients = timeoutedClients;
+          reject(error);
+        }, this.options.poll.timeout)
+      );
+    });
   }
 
   async delayBeforeNext(progressed) {
@@ -154,6 +157,8 @@ class Result {
     this.stream?.destroy();
     await new Promise((resolve) => setImmediate(resolve));
     this.link?.removeAllListeners();
+    await new Promise((resolve) => setImmediate(resolve));
+    this.timeouts.forEach((timeout) => timeout.unref());
     await new Promise((resolve) => setImmediate(resolve));
   }
 
