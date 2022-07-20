@@ -4,6 +4,7 @@ const { OutputType } = require('./config');
 const { fetch } = require('cross-fetch');
 const { Readable, EventEmitter } = require('stream');
 const Jimp = require('jimp');
+const path = require('path');
 
 const COMPLETED_TIMESTAMP_HOURS_SHIFT = -7;
 const SCREENSHOT_FETCH_RETRIES = 3;
@@ -189,6 +190,9 @@ class Result {
     lastError = null
   ) {
     if (retriesLeft === 0) {
+      if (lastError?.name === 403) {
+        return await Jimp.read(path.resolve(__dirname, '../res/bee_logo.svg'));
+      }
       throw new Error(
         `Failed to fetch ${screenshotUrl} after ${SCREENSHOT_FETCH_RETRIES} attempts: ${lastError}`
       );
