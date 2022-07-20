@@ -7,6 +7,7 @@ const Jimp = require('jimp');
 
 const COMPLETED_TIMESTAMP_HOURS_SHIFT = -7;
 const SCREENSHOT_FETCH_RETRIES = 3;
+const CLIENT_PROCESS_RETRIES = 3;
 
 class ResultStream extends Readable {
   constructor(options) {
@@ -32,10 +33,10 @@ class Result {
       ? new EventEmitter()
       : null;
     this.completed = new Map();
-    this.startPolling();
+    this.initializePolling();
   }
 
-  async startPolling() {
+  async initializePolling() {
     const { logger, test, options } = this.context;
     const startedAt = Date.now();
     logger.debug('polling started');
@@ -46,8 +47,8 @@ class Result {
       );
       // Delay initial request
       await this.delayBeforeNext(true);
-      // Avoid dead-locks
-      await Promise.race([this.poll(), this.rejectAfterTimeout()]);
+      // Start polling for results
+      await this.startPolling();
     } catch (reason) {
       logger.error(reason);
       throw reason;
@@ -57,6 +58,26 @@ class Result {
       const elapsed = Math.round((Date.now() - startedAt) / 1000);
       logger.debug('polling complete');
       logger.debug('test %s is ready in total %s seconds', test.id, elapsed);
+    }
+  }
+
+  async startPolling(retriesLeft = CLIENT_PROCESS_RETRIES, lastError = null) {
+    const { context } = this;
+    const { client, test } = context;
+
+    if (retriesLeft === 0) {
+      throw new Error(
+        `Failed to retrieve test results after ${CLIENT_PROCESS_RETRIES} attempts: ${lastError}`
+      );
+    }
+    try {
+      // Avoid dead-locks
+      return await Promise.race([this.poll(), this.rejectAfterTimeout()]);
+    } catch (error) {
+      if (!error.clients?.length) throw error;
+      // Timeout reached, reprocess screenshot for waiting clients
+      await client.reprocessScreenshots(test.id, error.clients);
+      return await this.startPolling(retriesLeft - 1, error.message);
     }
   }
 
