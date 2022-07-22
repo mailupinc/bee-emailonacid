@@ -1,6 +1,6 @@
 {
   "name": "@mailupinc/bee-emailonacid-plugin-content-cropping",
-  "version": "4.0.10",
+  "version": "4.0.11",
   "main": "index.js",
   "author": "Sergey Bekrin <sergey@bekrin.me>",
   "license": "MIT",

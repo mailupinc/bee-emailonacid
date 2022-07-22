@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.11](https://github.com/mailupinc/emailonacid/compare/v4.0.10...v4.0.11) (2022-07-22)
+
+**Note:** Version bump only for package
+@mailupinc/bee-emailonacid-plugin-content-cropping
+
+# Change Log
+
+All notable changes to this project will be documented in this file. See
+[Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
 ## [4.0.10](https://github.com/mailupinc/emailonacid/compare/v4.0.9...v4.0.10) (2022-07-22)
 
 **Note:** Version bump only for package
