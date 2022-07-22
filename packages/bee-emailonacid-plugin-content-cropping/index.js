@@ -20,7 +20,7 @@ function ContentCroppingPlugin({
       logger.debug('successfully injected visual markers');
     },
     async convert(context) {
-      const { logger, email, results } = context;
+      const { logger, email } = context;
       cropWhitespace = email.subject.includes('[crop]') || cropWhitespace;
       const converter = createCropper({
         cropWhitespace,
@@ -28,12 +28,14 @@ function ContentCroppingPlugin({
         jpegMarkerColor,
         logger,
       });
-      results.stream = results.stream.pipe(
+      context.stream = context.stream.pipe(
         new stream.Transform({
           objectMode: true,
-          transform([clientId, image], encoding, next) {
+          transform([clientId, image, src], encoding, next) {
             logger.debug('cropping %s screenshot', clientId);
-            converter(image).then((result) => next(null, [clientId, result]));
+            converter(image).then((result) =>
+              next(null, [clientId, result, src])
+            );
           },
         })
       );

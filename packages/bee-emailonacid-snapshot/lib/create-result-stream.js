@@ -2,7 +2,7 @@
 
 const { OutputType } = require('./config');
 const { fetch } = require('cross-fetch');
-const { Readable, EventEmitter } = require('stream');
+const { Readable } = require('stream');
 const Jimp = require('jimp');
 const path = require('path');
 
@@ -11,31 +11,19 @@ const SCREENSHOT_FETCH_RETRIES = 3;
 const CLIENT_PROCESS_RETRIES = 3;
 
 class ResultStream extends Readable {
-  constructor(options) {
-    super({ objectMode: true });
-    this.options = options;
-  }
-
-  // Stream hangs if not custom `_read` is provided
-  _read() {}
-}
-
-class Result {
   constructor(context, options) {
+    super({ objectMode: true });
     this.backOffInterval = options.poll.interval;
     this.aborted = false;
     this.timeouts = [];
     this.context = context;
     this.options = options;
-    this.stream = options.outputType.includes(OutputType.BUFFER)
-      ? new ResultStream(options)
-      : null;
-    this.link = options.outputType.includes(OutputType.LINK)
-      ? new EventEmitter()
-      : null;
     this.completed = new Map();
     this.initializePolling();
   }
+
+  // Stream hangs if not custom `_read` is provided
+  _read() {}
 
   async initializePolling() {
     const { logger, test, options } = this.context;
@@ -55,7 +43,7 @@ class Result {
       throw reason;
     } finally {
       // Mark stream completed
-      this.stream?.push(null);
+      this.push(null);
       const elapsed = Math.round((Date.now() - startedAt) / 1000);
       logger.debug('polling complete');
       logger.debug('test %s is ready in total %s seconds', test.id, elapsed);
@@ -136,16 +124,18 @@ class Result {
           attempts
         );
         // Remember the result to avoid double processing
+        let image;
+        let src;
         if (options.outputType.includes(OutputType.BUFFER)) {
           logger.debug('fetching %s', screenshotUrl);
-          const image = await this.fetchScreenshot(screenshotUrl);
-          this.stream.push([clientId, image]);
+          image = await this.fetchScreenshot(screenshotUrl);
         }
         if (options.outputType.includes(OutputType.LINK)) {
           logger.debug('linking %s', screenshotUrl);
-          this.link.emit('data', [clientId, new URL(screenshotUrl)]);
+          src = new URL(screenshotUrl);
         }
-        this.completed.set(clientId, { stream: this.stream, link: this.link });
+        this.completed.set(clientId, { image, src });
+        this.push([clientId, image, src]);
       })
     );
   }
@@ -182,9 +172,7 @@ class Result {
   async stopPolling() {
     this.aborted = true;
     await new Promise((resolve) => setImmediate(resolve));
-    this.stream?.destroy();
-    await new Promise((resolve) => setImmediate(resolve));
-    this.link?.removeAllListeners();
+    this.destroy();
     await new Promise((resolve) => setImmediate(resolve));
     this.timeouts.forEach((timeout) => timeout.unref());
     await new Promise((resolve) => setImmediate(resolve));
@@ -218,8 +206,8 @@ class Result {
   }
 }
 
-function createResult(context, options) {
-  return new Result(context, options);
+function createResultStream(context, options) {
+  return new ResultStream(context, options);
 }
 
-module.exports = createResult;
+module.exports = createResultStream;

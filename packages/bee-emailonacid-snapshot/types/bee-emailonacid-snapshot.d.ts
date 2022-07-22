@@ -13,10 +13,7 @@ export interface Context {
   test?: {
     id: TestId;
   };
-  results: {
-    stream?: Readable;
-    link?: URL;
-  };
+  stream?: Readable;
   stopPolling?: () => Promise<void>;
 }
 

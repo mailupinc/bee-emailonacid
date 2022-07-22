@@ -5,6 +5,8 @@ const ContentRendererPlugin = require('@mailupinc/bee-emailonacid-plugin-content
 const LocalCopyPlugin = require('@mailupinc/bee-emailonacid-plugin-local-copy');
 const ContentCroppingPlugin = require('@mailupinc/bee-emailonacid-plugin-content-cropping');
 
+const OutputType = { BUFFER: 0, LINK: 1 };
+
 function withOverridableClients(config = {}) {
   return Object.assign({}, config, {
     clients: process.env.EOA_CLIENTS
@@ -26,11 +28,6 @@ function withDefaultPlugins(config = {}) {
       .filter(Boolean),
   });
 }
-
-const OutputType = {
-  BUFFER: 0,
-  LINK: 1,
-};
 
 module.exports = {
   withOverridableClients,

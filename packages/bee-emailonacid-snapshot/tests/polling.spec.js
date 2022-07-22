@@ -27,11 +27,13 @@ describe('polling', () => {
     async (clientName) => {
       jest.setTimeout(1.5 * 60 * 1000);
 
+      const outputs = [OutputType.BUFFER, OutputType.LINK];
+
       const createEmail = configureCreateEmail({
         credentials: { apiKey: 'sandbox', accountPassword: 'sandbox' },
         clients: [clientName],
         server: emulator.url,
-        outputType: [OutputType.BUFFER, OutputType.LINK],
+        outputType: outputs,
       });
       // Set available clients
       emulator.setState({
@@ -62,9 +64,13 @@ describe('polling', () => {
           },
         },
       });
-      const results = await email.screenshot(clientName);
-      expect(results.stream).toMatchImageSnapshot();
-      expect(results.link.href).toEqual(new URL(imageUrl).href);
+      const { stream, link } = await email.screenshot(clientName);
+      if (outputs.includes(OutputType.BUFFER)) {
+        expect(stream).toMatchImageSnapshot();
+      }
+      if (outputs.includes(OutputType.LINK)) {
+        expect(link.href).toEqual(new URL(imageUrl).href);
+      }
     }
   );
 });

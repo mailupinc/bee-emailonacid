@@ -7,7 +7,8 @@ const createClient = require('@mailupinc/bee-emailonacid-client');
 const getConfig = require('./get-config');
 const createLogger = require('./create-logger');
 const getConfigDefaults = require('./get-config-defaults');
-const createResult = require('./create-result');
+const createResultStream = require('./create-result-stream');
+const { OutputType } = require('./config');
 
 function configureCreateEmail(configuredOptions = {}) {
   // Merge all given options, but replace list of clients instead of concat
@@ -67,6 +68,12 @@ function configureCreateEmail(configuredOptions = {}) {
     if (process.env.EOA_CLIENTS) process.env.EOA_CLIENTS = String(knownClients);
     // eslint-disable-next-line require-atomic-updates
     options.clients = knownClients;
+    // Remove cropper plugin if only LINK output is selected
+    if (!options.outputType.includes(OutputType.BUFFER)) {
+      options.plugins = options.plugins.filter(
+        (plugin) => plugin.name !== 'ContentCroppingPlugin'
+      );
+    }
     // Run `prepare` plugins
     const email = { content, subject };
     const context = { logger, client, email, options };
@@ -83,9 +90,9 @@ function configureCreateEmail(configuredOptions = {}) {
       subject: context.email.subject,
     });
     // eslint-disable-next-line require-atomic-updates
-    context.results = createResult(context, options);
+    context.stream = createResultStream(context, options);
     // eslint-disable-next-line require-atomic-updates
-    context.stopPolling = context.results.stopPolling.bind(context.results);
+    context.stopPolling = context.stream.stopPolling.bind(context.stream);
     // Track complete result timings
     options.clients.forEach((clientId) =>
       logger.time(`screenshot:${clientId}`)
@@ -97,26 +104,12 @@ function configureCreateEmail(configuredOptions = {}) {
       }
     }
     // Convert results to a map of promises
-    const outputs = options.clients.reduce((map, clientId) => {
+    const results = options.clients.reduce((map, clientId) => {
       return map.set(
         clientId,
         new Promise((resolve) => {
-          const { results } = context;
-          let count = 0;
-          if (results.stream) count++;
-          if (results.link) count++;
-          let resolved = {};
-
-          const setCompleted = (data) => {
-            resolved = mergeWith(resolved, data);
-            if (--count === 0) resolve(resolved);
-          };
-
-          results.stream?.on('data', ([receivedClientId, image]) => {
-            if (clientId === receivedClientId) setCompleted({ stream: image });
-          });
-          results.link?.on('data', ([receivedClientId, url]) => {
-            if (clientId === receivedClientId) setCompleted({ link: url });
+          context.stream.on('data', ([receivedClientId, image, src]) => {
+            if (clientId === receivedClientId) resolve({ image, src });
           });
         })
       );
@@ -142,13 +135,10 @@ function configureCreateEmail(configuredOptions = {}) {
           '`.screenshot()` is called for an unavailable client %s',
           clientId
         );
-        const output = await outputs.get(clientId);
-        const image = {
-          stream: await output.stream?.getBufferAsync(Jimp.MIME_PNG),
-          link: output.link,
-        };
+        const { image, src } = await results.get(clientId);
+        const result = await image?.getBufferAsync(Jimp.MIME_PNG);
         logger.timeEnd(`screenshot:${clientId}`);
-        return image;
+        return { stream: result, link: src };
       },
       async clean() {
         logger.time('clean');
