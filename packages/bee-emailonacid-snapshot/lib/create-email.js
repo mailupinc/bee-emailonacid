@@ -93,18 +93,18 @@ function configureCreateEmail(configuredOptions = {}) {
     // Run `process` plugins
     for (const plugin of options.plugins) {
       if (plugin.convert) {
-        // await plugin.convert(context);
+        await plugin.convert(context);
       }
     }
     // Convert results to a map of promises
-    const results = options.clients.reduce((map, clientId) => {
+    const outputs = options.clients.reduce((map, clientId) => {
       return map.set(
         clientId,
         new Promise((resolve) => {
-          const { stream, link } = context.results;
+          const { results } = context;
           let count = 0;
-          if (stream) count++;
-          if (link) count++;
+          if (results.stream) count++;
+          if (results.link) count++;
           let resolved = {};
 
           const setCompleted = (data) => {
@@ -112,10 +112,10 @@ function configureCreateEmail(configuredOptions = {}) {
             if (--count === 0) resolve(resolved);
           };
 
-          stream?.on('data', ([receivedClientId, image]) => {
+          results.stream?.on('data', ([receivedClientId, image]) => {
             if (clientId === receivedClientId) setCompleted({ stream: image });
           });
-          link?.on('data', ([receivedClientId, url]) => {
+          results.link?.on('data', ([receivedClientId, url]) => {
             if (clientId === receivedClientId) setCompleted({ link: url });
           });
         })
@@ -142,13 +142,13 @@ function configureCreateEmail(configuredOptions = {}) {
           '`.screenshot()` is called for an unavailable client %s',
           clientId
         );
-        const image = await results.get(clientId);
-        const result = {
-          stream: await image.stream?.getBufferAsync(Jimp.MIME_PNG),
-          link: image.link,
+        const output = await outputs.get(clientId);
+        const image = {
+          stream: await output.stream?.getBufferAsync(Jimp.MIME_PNG),
+          link: output.link,
         };
         logger.timeEnd(`screenshot:${clientId}`);
-        return result;
+        return image;
       },
       async clean() {
         logger.time('clean');

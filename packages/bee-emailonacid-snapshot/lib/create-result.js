@@ -63,12 +63,10 @@ class Result {
   }
 
   async startPolling(retriesLeft = CLIENT_PROCESS_RETRIES, lastError = null) {
-    const { context } = this;
-    const { client, test } = context;
-
+    const { logger, client, test } = this.context;
     if (retriesLeft === 0) {
       throw new Error(
-        `Failed to retrieve test results after ${CLIENT_PROCESS_RETRIES} attempts: ${lastError}`
+        `Failed to retrieve results after ${CLIENT_PROCESS_RETRIES} attempts: ${lastError}`
       );
     }
     try {
@@ -77,8 +75,16 @@ class Result {
     } catch (error) {
       if (!error.clients?.length) throw error;
       // Timeout reached, reprocess screenshot for waiting clients
+      retriesLeft--;
+      const clientsLeft = error.clients.join(',');
+      logger.debug(
+        `reprocess clients %s, attempt: %s`,
+        clientsLeft,
+        CLIENT_PROCESS_RETRIES - retriesLeft
+      );
       await client.reprocessScreenshots(test.id, error.clients);
-      return await this.startPolling(retriesLeft - 1, error.message);
+      logger.debug('restart polling for clients: %s', clientsLeft);
+      return await this.startPolling(retriesLeft, error.message);
     }
   }
 
