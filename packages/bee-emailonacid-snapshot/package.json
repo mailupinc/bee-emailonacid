@@ -1,6 +1,6 @@
 {
   "name": "@mailupinc/bee-emailonacid-snapshot",
-  "version": "4.0.12",
+  "version": "4.0.13",
   "description": "Mails visual regression tooling via Email on Acid service",
   "main": "index.js",
   "types": "types/emailonacid-snapshot.d.ts",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@mailupinc/bee-emailonacid-client": "^4.0.7",
-    "@mailupinc/bee-emailonacid-plugin-content-cropping": "^4.0.11",
+    "@mailupinc/bee-emailonacid-plugin-content-cropping": "^4.0.13",
     "@mailupinc/bee-emailonacid-plugin-content-renderer": "^4.0.5",
     "@mailupinc/bee-emailonacid-plugin-local-copy": "^4.0.5",
     "@mailupinc/bee-emailonacid-plugin-thread-busting": "^4.0.5",
