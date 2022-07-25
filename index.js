@@ -89,13 +89,13 @@ async function saveShot(email, client, name, folder) {
     if (!fs.existsSync(folder)) fs.mkdirSync(folder);
 
     if (stream) {
-      await fs.writeFileSync(`${filename}.png`, stream, 'binary', (error) => {
+      fs.writeFileSync(`${filename}.png`, stream, 'binary', (error) => {
         if (error) reject('Error while saving image.');
       });
     }
 
     if (link) {
-      await fs.writeFileSync(`${filename}.webloc`, lnk, 'binary', (error) => {
+      fs.writeFileSync(`${filename}.webloc`, lnk, 'binary', (error) => {
         if (error) reject('Error while saving link.');
       });
     }
