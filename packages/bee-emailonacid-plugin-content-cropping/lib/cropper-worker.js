@@ -6,7 +6,7 @@ const Jimp = require('jimp');
 async function cropperWorker(image, markerColor, cropWhitespace) {
   const width = image.bitmap.width;
   const height = image.bitmap.height;
-  const tolerance = 0.05;
+  const tolerance = 0.1;
   const safeZone = 2;
   const referenceRgba = Jimp.intToRGBA(Jimp.cssColorToHex(markerColor));
   // Scan all pixels to find similiar ones first
