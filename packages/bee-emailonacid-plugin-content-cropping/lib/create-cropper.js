@@ -1,7 +1,7 @@
 'use strict';
 
-const { spawnSync } = require('child_process');
 const Jimp = require('jimp');
+const cropperWorker = require('./cropper-worker');
 
 function createCropper({
   cropWhitespace,
@@ -13,17 +13,7 @@ function createCropper({
     try {
       const color =
         image.getMIME() === Jimp.MIME_JPEG ? jpegMarkerColor : markerColor;
-      const options = {
-        input: await image.getBufferAsync(Jimp.MIME_PNG),
-        stdio: ['pipe', 'inherit', 'inherit', 'pipe'],
-      };
-      return await Jimp.read(
-        spawnSync(
-          process.execPath,
-          [require.resolve('./cropper-worker'), color, cropWhitespace],
-          options
-        ).output[3]
-      );
+      return await cropperWorker(image, color, cropWhitespace);
     } catch (reason) {
       logger.error('failed to identify visual markers');
       logger.error('perhaps screenshot is corrupted?');
