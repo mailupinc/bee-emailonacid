@@ -8,9 +8,11 @@ const {
   configureCreateEmail,
 } = require('./packages/bee-emailonacid-snapshot');
 
-const content = '<html><body><h1>HELLO TEAM</h1></body></html>';
-const subject = 'Local EoA test';
-const htmlFile = 'output.html';
+const subject = 'Email preview';
+const htmlFile = 'sample.email.html';
+const content = fs
+  .readFileSync(path.resolve('html', htmlFile), 'utf8')
+  .toString();
 
 const config = {
   clients: [
