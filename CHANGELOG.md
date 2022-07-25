@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.12](https://github.com/mailupinc/emailonacid/compare/v4.0.11...v4.0.12) (2022-07-25)
+
+**Note:** Version bump only for package @mailupinc/bee-emailonacid
+
+# Change Log
+
+All notable changes to this project will be documented in this file. See
+[Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
 ## [4.0.11](https://github.com/mailupinc/emailonacid/compare/v4.0.10...v4.0.11) (2022-07-22)
 
 **Note:** Version bump only for package @mailupinc/bee-emailonacid
