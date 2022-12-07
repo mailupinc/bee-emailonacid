@@ -1688,10 +1688,10 @@
 
 "@mailupinc/bee-emailonacid-snapshot@file:/Users/ponti/Documents/developing/bee-emailonacid/packages/bee-emailonacid-snapshot":
   "resolved" "file:packages/bee-emailonacid-snapshot"
-  "version" "4.0.14"
+  "version" "4.0.15"
   dependencies:
     "@mailupinc/bee-emailonacid-client" "^4.0.7"
-    "@mailupinc/bee-emailonacid-plugin-content-cropping" "^4.0.11"
+    "@mailupinc/bee-emailonacid-plugin-content-cropping" "^4.0.14"
     "@mailupinc/bee-emailonacid-plugin-content-renderer" "^4.0.5"
     "@mailupinc/bee-emailonacid-plugin-local-copy" "^4.0.5"
     "@mailupinc/bee-emailonacid-plugin-thread-busting" "^4.0.5"
