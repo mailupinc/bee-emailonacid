@@ -109,7 +109,7 @@ class ResultStream extends Readable {
         const result = results.find((entry) => entry.id === clientId);
         const screenshotUrl = result.screenshots.default;
         const { submitted, completed } = result.statusDetails;
-        // Fix EoA's bizzare timestamp shift
+        // Fix EoA's bizzare timestamp shift - only if completed is defined
         completed?.setHours(
           completed.getHours() + COMPLETED_TIMESTAMP_HOURS_SHIFT
         );
