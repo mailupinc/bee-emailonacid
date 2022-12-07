@@ -110,7 +110,7 @@ class ResultStream extends Readable {
         const screenshotUrl = result.screenshots.default;
         const { submitted, completed } = result.statusDetails;
         // Fix EoA's bizzare timestamp shift
-        completed.setHours(
+        completed?.setHours(
           completed.getHours() + COMPLETED_TIMESTAMP_HOURS_SHIFT
         );
         const elapsed = Math.round((completed - submitted) / 1000);
