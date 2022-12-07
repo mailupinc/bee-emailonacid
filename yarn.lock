@@ -1644,9 +1644,9 @@
     "serve-handler" "^6.0.0"
     "wait-for-localhost" "^3.0.0"
 
-"@mailupinc/bee-emailonacid-plugin-content-cropping@^4.0.11", "@mailupinc/bee-emailonacid-plugin-content-cropping@file:/Users/ponti/Documents/developing/bee-emailonacid/packages/bee-emailonacid-plugin-content-cropping":
+"@mailupinc/bee-emailonacid-plugin-content-cropping@^4.0.14", "@mailupinc/bee-emailonacid-plugin-content-cropping@file:/Users/ponti/Documents/developing/bee-emailonacid/packages/bee-emailonacid-plugin-content-cropping":
   "resolved" "file:packages/bee-emailonacid-plugin-content-cropping"
-  "version" "4.0.11"
+  "version" "4.0.14"
   dependencies:
     "get-stdin" "^8.0.0"
     "jimp" "^0.16.0"
@@ -1688,7 +1688,7 @@
 
 "@mailupinc/bee-emailonacid-snapshot@file:/Users/ponti/Documents/developing/bee-emailonacid/packages/bee-emailonacid-snapshot":
   "resolved" "file:packages/bee-emailonacid-snapshot"
-  "version" "4.0.12"
+  "version" "4.0.14"
   dependencies:
     "@mailupinc/bee-emailonacid-client" "^4.0.7"
     "@mailupinc/bee-emailonacid-plugin-content-cropping" "^4.0.11"
