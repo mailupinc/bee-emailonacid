@@ -1,7 +1,7 @@
 {
   "name": "@mailupinc/bee-emailonacid",
   "version": "1.0.0",
-  "private": false,
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
