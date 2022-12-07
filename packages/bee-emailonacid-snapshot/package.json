@@ -1,6 +1,6 @@
 {
   "name": "@mailupinc/bee-emailonacid-snapshot",
-  "version": "4.0.14",
+  "version": "4.0.15",
   "description": "Mails visual regression tooling via Email on Acid service",
   "main": "index.js",
   "types": "types/emailonacid-snapshot.d.ts",
