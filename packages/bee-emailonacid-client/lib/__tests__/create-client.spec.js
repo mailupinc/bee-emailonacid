@@ -242,7 +242,7 @@ describe('createClient', () => {
             thumbnail: 'http://baz/bar.png',
             status: 'Processing',
             // eslint-disable-next-line camelcase
-            status_details: { attemps: 1 },
+            status_details: { attempts: 1 },
           },
         }),
       });
@@ -256,7 +256,7 @@ describe('createClient', () => {
           screenshots: { default: 'http://bar/baz.png' },
           thumbnail: 'http://baz/bar.png',
           status: 'Processing',
-          statusDetails: { attemps: 1 },
+          statusDetails: { attempts: 1 },
         },
       ]);
       expect(fetch).toHaveBeenCalledWith(url, expect.any(Object));
