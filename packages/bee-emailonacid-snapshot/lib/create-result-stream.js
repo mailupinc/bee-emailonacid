@@ -58,7 +58,7 @@ class ResultStream extends Readable {
     }
     try {
       // Avoid dead-locks
-      return await Promise.race([this.poll(), this.rejectAfterTimeout()]);
+      await Promise.race([this.poll(), this.rejectAfterTimeout()]);
     } catch (error) {
       if (!error.clients?.length) throw error;
       // Timeout reached, reprocess screenshot for waiting clients
@@ -71,7 +71,7 @@ class ResultStream extends Readable {
       );
       await client.reprocessScreenshots(test.id, error.clients);
       logger.debug('restart polling for clients: %s', clientsLeft);
-      return await this.startPolling(retriesLeft, error.message);
+      await this.startPolling(retriesLeft, error.message);
     }
   }
 
