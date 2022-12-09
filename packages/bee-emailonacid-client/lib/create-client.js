@@ -169,7 +169,7 @@ function createClient({
     async getResults(testId) {
       validateNonEmptyString(testId, 'testId');
       const data = await fetchApi(`email/tests/${testId}/results`);
-      // Normilise object with key mapping to flat array
+      // Normilise object with key mapping to flat array.
       return Object.keys(data).reduce((clients, key) => {
         const client = data[key];
         return clients.concat(

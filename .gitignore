@@ -4,3 +4,4 @@ coverage/
 reports/
 *.log
 .DS_Store
+.npmrc
