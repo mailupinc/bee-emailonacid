@@ -60,6 +60,7 @@ class ResultStream extends Readable {
       // Avoid dead-locks
       await Promise.race([this.poll(), this.rejectAfterTimeout()]);
     } catch (error) {
+      // Timeout reached but no clients. This exception should be catched externally
       if (!error.clients?.length) throw error;
       // Timeout reached, reprocess screenshot for waiting clients
       retriesLeft--;
