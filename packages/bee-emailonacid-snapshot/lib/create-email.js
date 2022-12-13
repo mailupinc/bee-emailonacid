@@ -107,10 +107,12 @@ function configureCreateEmail(configuredOptions = {}) {
     const results = options.clients.reduce((map, clientId) => {
       return map.set(
         clientId,
-        new Promise((resolve) => {
+        new Promise((resolve, reject) => {
           context.stream.on('data', ([receivedClientId, image, src]) => {
             if (clientId === receivedClientId) resolve({ image, src });
           });
+          context.stream.on('error', reject);
+          context.stream.on('close', () => reject('stream closed'));
         })
       );
     }, new Map());

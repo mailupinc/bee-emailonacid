@@ -39,7 +39,7 @@ class ResultStream extends Readable {
       await this.startPolling();
     } catch (reason) {
       logger.error(reason);
-      throw reason;
+      // throw reason;
     } finally {
       // Mark stream completed
       this.push(null);
@@ -79,7 +79,10 @@ class ResultStream extends Readable {
   async poll() {
     const { context, options, aborted } = this;
     const { client, test } = context;
-    if (aborted) return;
+    if (aborted) {
+      await this.clearTimeouts();
+      return;
+    }
     // Process the result only if some progress is received
     const status = await client.getTest(test.id);
     const progressed = Boolean(
@@ -87,7 +90,10 @@ class ResultStream extends Readable {
     );
     if (progressed) await this.progress(status);
     // Exit if all clients are ready
-    if (options.clients.length === status.completed.length) return;
+    if (options.clients.length === status.completed.length) {
+      await this.clearTimeouts();
+      return;
+    }
     await this.delayBeforeNext(progressed);
     await this.poll();
   }
@@ -177,6 +183,10 @@ class ResultStream extends Readable {
     await new Promise((resolve) => setImmediate(resolve));
     this.destroy();
     await new Promise((resolve) => setImmediate(resolve));
+    await this.clearTimeouts();
+  }
+
+  async clearTimeouts() {
     this.timeouts.forEach((timeout) => timeout.unref());
     await new Promise((resolve) => setImmediate(resolve));
   }

@@ -1623,9 +1623,9 @@
     "npmlog" "^4.1.2"
     "write-file-atomic" "^2.3.0"
 
-"@mailupinc/bee-emailonacid-client@^4.0.7", "@mailupinc/bee-emailonacid-client@file:/Users/ponti/Documents/developing/bee-emailonacid/packages/bee-emailonacid-client":
+"@mailupinc/bee-emailonacid-client@^4.0.22", "@mailupinc/bee-emailonacid-client@file:/Users/ponti/Documents/developing/bee-emailonacid/packages/bee-emailonacid-client":
   "resolved" "file:packages/bee-emailonacid-client"
-  "version" "4.0.7"
+  "version" "4.0.22"
   dependencies:
     "camelcase-keys" "^6.1.1"
     "cross-fetch" "^3.0.4"
@@ -1688,7 +1688,7 @@
 
 "@mailupinc/bee-emailonacid-snapshot@file:/Users/ponti/Documents/developing/bee-emailonacid/packages/bee-emailonacid-snapshot":
   "resolved" "file:packages/bee-emailonacid-snapshot"
-  "version" "4.0.15"
+  "version" "4.0.22"
   dependencies:
     "@mailupinc/bee-emailonacid-client" "^4.0.7"
     "@mailupinc/bee-emailonacid-plugin-content-cropping" "^4.0.14"
